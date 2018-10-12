@@ -1,4 +1,4 @@
-Order_total module: Priority Handling v.1.2.1
+Order_total module: Priority Handling v1.3.0
 License:       GPL v2.0 
 Author: Markus Lankeit (markus@lankeit.org)
 
@@ -32,39 +32,37 @@ Install
 
 	a. Enable Priority Handling Module?  True 
 
-	b. Offer Priority Handling? True (both a. & b. need to be False to disable module)
-
-	c. Sort Order?  
+	b. Sort Order?  
 		Set this to the order you want it to appear in the totals table. Default is 150. 
 		Be careful NOT to have two modules with the same order number. 
 
-	d. Priority Handling Charge Type
+	e. Priority Handling Charge Type
 		Choose whether to calculate by percent or define a tier structure
 
-	e. Handling Charge: Percentage  
+	d. Handling Charge: Percentage  
 		Enter the percentage to use for handling charge.   
 
-	f. Handling Charge: Fee Tier
+	e. Handling Charge: Fee Tier
 		Enter the fee tier to use.  
 
-	g. Handling Charge: Price Tier
+	f. Handling Charge: Price Tier
 		Enter the price tier to use for defining price ranges.
 		Note: for tiered handling, the charge is [(order sub-total) / (price tier)] * (fee tier)
 		Note: to setup a flat-fee scheme, make the price tier large and enter your flat fee in the fee tier.
 
-	h. Handling Charge: Price Tier Ceiling
+	g. Handling Charge: Price Tier Ceiling
 		Enter the maximum amount to be used for tiered structures.
 		Priority charges will not be assessed for any amounts above this maximum.
 		The detfault tier values setup a 50 cent charge for every $100 tier up to a $1000 maximum,
 		so the maximum priority charge that will be assessed is $5 (10 possible tiers with the default setting).
 		If the price tier was $10, then the maximum priority charge would jump to $50 (100 possible tiers).
 		
-	i. Tax Class... 
+	h. Tax Class... 
 		Apply which class, if any, to this type of handling fee.
 		Note: services charges may fall under separate categories as goods in some areas.
 		      You may need to setup a different tax class for this.
 
-	j. Tax Display  
+	i. Tax Display  
 		Usually, you want to combine taxes on your invoice by class (default).  Otherwise,
 		you can choose to add any defined tax into the handling charge.
 
@@ -94,7 +92,7 @@ Release 1.0, 061102 mlankeit
 Change Log:
 -----------
 Release 1.3.0:
-o Tested against Zen Cart release 1.5.5f
+o Tested against Zen Cart release 1.5.5f and One-Page Checkout v2.0.4
 o Changes to enable the module to be used under PHP versions 7.0 and later.
 o Change the module's selection to use a drop-down input instead of checkbox.
 o Remove redundant configuration setting.
