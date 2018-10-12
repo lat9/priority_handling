@@ -85,6 +85,7 @@ Upgrade from 1.0
 
 HISTORY:
 --------
+Release 1.3.0, 20181012 lat9
 Release 1.2.1, 130529 mlankeit
 Release 1.2, 071312 mlankeit
 Release 1.1, 071010 Nick Rodgers
@@ -92,6 +93,11 @@ Release 1.0, 061102 mlankeit
 
 Change Log:
 -----------
+Release 1.3.0:
+o Tested against Zen Cart release 1.5.5f
+o Changes to enable the module to be used under PHP versions 7.0 and later.
+o Change the module's selection to use a radio-button input instead of checkbox.
+
 Release 1.2.1:
 o Tested against Zen Cart release 1.5.1.  No code changes--just updated this readme file. 
 
