@@ -77,6 +77,9 @@ class ot_priority_handling
                     $ph_value = $ph_subtotal + $ph_tax; // nr@sebo addition
                 } else {
                     $tax_descrip = zen_get_tax_description($this->tax_class, $cntry_id, $zn_id);
+                    if (!isset($order->info['tax_groups'][$tax_descrip])) {
+                        $order->info['tax_groups'][$tax_descrip] = 0;
+                    }
                     $order->info['tax_groups'][$tax_descrip] += $ph_tax;
                     $ph_text = $currencies->format($ph_subtotal, true, $order->info['currency'], $order->info['currency_value']);
                     $ph_value = $ph_subtotal; // nr@sebo addition
@@ -103,13 +106,23 @@ class ot_priority_handling
             return false;
         }
         $selected = (isset($_SESSION['priority_handling']) && $_SESSION['priority_handling'] == 1);
+        $handling_array = array(
+            array(
+                'id' => '0',
+                'text' => MODULE_ORDER_TOTAL_PRIORITY_HANDLING_NO
+            ),
+            array(
+                'id' => '1',
+                'text' => MODULE_ORDER_TOTAL_PRIORITY_HANDLING_YES
+            )
+        );
         $selection = array(
             'id' => $this->code,
             'module' => $this->title,
             'redeem_instructions' => MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TEXT_DESCR . '<br /><br />',
             'fields' => array(
                 array(
-                    'field' => zen_draw_checkbox_field('opt_priority_handling', '1', $selected),
+                    'field' => zen_draw_pull_down_menu('opt_priority_handling', $handling_array, ($selected) ? '1' : '0'),
                     'title' => MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TEXT_ENTER_CODE
                 )
             )
@@ -133,10 +146,8 @@ class ot_priority_handling
     function collect_posts()
     {
         if ($this->enabled) {
-            if ($_POST['opt_priority_handling']) {
+            if (isset($_POST['opt_priority_handling'])) {
                 $_SESSION['priority_handling'] = $_POST['opt_priority_handling'];
-            } else {
-                $_SESSION['priority_handling'] = '0';
             }
         }
     }

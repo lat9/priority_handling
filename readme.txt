@@ -96,7 +96,8 @@ Change Log:
 Release 1.3.0:
 o Tested against Zen Cart release 1.5.5f
 o Changes to enable the module to be used under PHP versions 7.0 and later.
-o Change the module's selection to use a radio-button input instead of checkbox.
+o Change the module's selection to use a drop-down input instead of checkbox.
+o Remove redundant configuration setting.
 
 Release 1.2.1:
 o Tested against Zen Cart release 1.5.1.  No code changes--just updated this readme file. 
