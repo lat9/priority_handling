@@ -8,6 +8,10 @@ Rework Author:  Richard Bartz (richard@bartz.net)
 Rework Author:  Byron Herrera (bh@silencesoft.com)
 Rework Author: Jade True (jade@sagefish.com)
 
+Zen Cart download: https://www.zen-cart.com/downloads.php?do=file&id=236
+Zen Cart Support Thread: https://www.zen-cart.com/showthread.php?50420-Rush-Priority-Handling-Charge
+GitHub Repository: https://github.com/lat9/priority_handling
+
 This module is a modification of the Insurance Shipping module, which is a modification of the 
 low order fee module from Harald Ponce de Leon.
 
