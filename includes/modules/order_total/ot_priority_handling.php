@@ -14,7 +14,7 @@
 */
 class ot_priority_handling 
 {
-    var $title, $output;
+    var $title, $output, $code, $description, $enabled, $sort_order, $handling_per, $handling_over, $increment, $fee, $tax_class, $credit_class, $check;
     
     function __construct()
     {
@@ -99,7 +99,7 @@ class ot_priority_handling
     {
         return 0.0;
     }
-              
+    
     function credit_selection()
     {
         if (!$this->enabled) {
@@ -122,6 +122,7 @@ class ot_priority_handling
             'redeem_instructions' => MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TEXT_DESCR . '<br /><br />',
             'fields' => array(
                 array(
+                    'tag' => '',
                     'field' => zen_draw_pull_down_menu('opt_priority_handling', $handling_array, ($selected) ? '1' : '0'),
                     'title' => MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TEXT_ENTER_CODE
                 )
