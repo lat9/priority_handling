@@ -7,6 +7,4 @@ $define = [
     'MODULE_ORDER_TOTAL_PRIORITY_HANDLING_YES' => 'Yes',
     'MODULE_ORDER_TOTAL_PRIORITY_HANDLING_NO' => 'No',
 ];
-
 return $define;
-?>
