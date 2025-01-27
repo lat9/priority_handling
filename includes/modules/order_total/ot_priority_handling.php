@@ -1,13 +1,13 @@
 <?php
 /*
   Priority Handling Module
-  ot_priority_handling.php, v1.3.0 20181012
+  ot_priority_handling.php, v2.0.0
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
   Copyright (c) 2002 osCommerce
 
-  Modified to work with zen cart
+  Modified to work with zen cart 2.1.0 and Edit Orders 5.0.0
 
   Released under the GNU General Public License
 */
@@ -20,7 +20,8 @@ class ot_priority_handling
     public bool $enabled;
     public null|int $sort_order;
     public int $tax_class;
-    public int $credit_class;
+    public bool $credit_class;
+    public array $eoInfo = [];
 
     protected int $check;
     protected float $handling_per;
@@ -42,6 +43,11 @@ class ot_priority_handling
         $this->credit_class = true;
         $this->enabled = (MODULE_ORDER_TOTAL_PRIORITY_HANDLING_STATUS === 'true');
 
+        $this->eoInfo = [
+            'installed' => false,
+            'value' => 0,
+        ];
+
         if ($this->enabled === true) {
             $this->handling_per = (float)MODULE_ORDER_TOTAL_PRIORITY_HANDLING_PER;
             $this->handling_over = (float)MODULE_ORDER_TOTAL_PRIORITY_HANDLING_OVER;
@@ -51,9 +57,22 @@ class ot_priority_handling
                 trigger_error('Handling Charge: Price Tier must be greater than 0 (' . MODULE_ORDER_TOTAL_PRIORITY_HANDLING_INCREMENT . '); using a default of 100.', E_USER_WARNING);
                 $this->increment = 100;
             }
-            
+
             $this->fee = (float)MODULE_ORDER_TOTAL_PRIORITY_HANDLING_FEE;
             $this->tax_class = (int)MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TAX_CLASS;
+
+            $this->setStatusForEditOrders();
+        }
+    }
+
+    // -----
+    // This method provides integration with EO 5.0.0 and later. That version of EO maintains
+    // a list of credit-class order-total modules that are currently used in the order.
+    //
+    protected function setStatusForEditOrders(): void
+    {
+        if (IS_ADMIN_FLAG === true) {
+            $_SESSION['priority_handling'] = !empty($_POST['opt_priority_handling']) || $this->eoInfo['installed'] === true;
         }
     }
 
@@ -61,7 +80,12 @@ class ot_priority_handling
     {
         global $order, $currencies;
 
-        if ($this->enabled === false || empty($_SESSION['priority_handling'])) {
+        if ($this->enabled === false) {
+            return;
+        }
+
+        $this->setStatusForEditOrders();
+        if (empty($_SESSION['priority_handling'])) {
             return;
         }
 
@@ -114,12 +138,14 @@ class ot_priority_handling
     {
         return 0.0;
     }
-    
-    public function credit_selection()
+
+    public function credit_selection(): array
     {
         if ($this->enabled === false) {
-            return false;
+            return [];
         }
+
+        $this->setStatusForEditOrders();
 
         $handling_array = [
             [
@@ -138,8 +164,8 @@ class ot_priority_handling
             'redeem_instructions' => MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TEXT_DESCR . '<br><br>',
             'fields' => [
                 [
-                    'tag' => '',
-                    'field' => zen_draw_pull_down_menu('opt_priority_handling', $handling_array, ($selected === true) ? '1' : '0'),
+                    'tag' => 'sel-' . $this->code,
+                    'field' => zen_draw_pull_down_menu('opt_priority_handling', $handling_array, ($selected === true) ? '1' : '0', 'id="sel-' . $this->code . '"'),
                     'title' => MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TEXT_ENTER_CODE,
                 ],
             ],
@@ -163,7 +189,9 @@ class ot_priority_handling
     public function collect_posts()
     {
         if ($this->enabled === true) {
-            $_SESSION['priority_handling'] = !empty(($_POST['opt_priority_handling'] ?? ''));
+            if (IS_ADMIN_FLAG === true && ($_POST['ot_class'] ?? '') === $this->code) {
+                $this->setStatusForEditOrders();
+            }
         }
     }
 
@@ -187,12 +215,12 @@ class ot_priority_handling
     {
         return [
             'MODULE_ORDER_TOTAL_PRIORITY_HANDLING_STATUS',
-            'MODULE_ORDER_TOTAL_PRIORITY_HANDLING_SORT_ORDER', 
-            'MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TYPE', 
-            'MODULE_ORDER_TOTAL_PRIORITY_HANDLING_PER', 
-            'MODULE_ORDER_TOTAL_PRIORITY_HANDLING_FEE', 
-            'MODULE_ORDER_TOTAL_PRIORITY_HANDLING_INCREMENT', 
-            'MODULE_ORDER_TOTAL_PRIORITY_HANDLING_OVER', 
+            'MODULE_ORDER_TOTAL_PRIORITY_HANDLING_SORT_ORDER',
+            'MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TYPE',
+            'MODULE_ORDER_TOTAL_PRIORITY_HANDLING_PER',
+            'MODULE_ORDER_TOTAL_PRIORITY_HANDLING_FEE',
+            'MODULE_ORDER_TOTAL_PRIORITY_HANDLING_INCREMENT',
+            'MODULE_ORDER_TOTAL_PRIORITY_HANDLING_OVER',
             'MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TAX_CLASS',
             'MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TAX_INLINE',
         ];

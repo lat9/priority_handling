@@ -1,5 +1,5 @@
 Order_total module: Priority Handling v2.0.0
-License:       GPL v2.0 
+License: GPL v2.0 
 Author: Markus Lankeit (markus@lankeit.org), lat9
 
 Based on "Shipping Insurance" module:
@@ -86,7 +86,7 @@ Upgrade from 1.0
 
 HISTORY:
 --------
-Release 2.0.0, 20250123 lat9, carolinalaser
+Release 2.0.0, 20250127 lat9, carolinalaser
 Release 1.3.0, 20181012 lat9
 Release 1.2.1, 130529 mlankeit
 Release 1.2, 071312 mlankeit
@@ -98,6 +98,7 @@ Change Log:
 Release 2.0.0:
 o Tested against Zen Cart release 2.1.0.
 o Changes to enable the module to be used under PHP versions 8.0 and later.
+o Updates for continued operation when run under Edit Orders v5.0.0 or later.
 
 Release 1.3.0:
 o Tested against Zen Cart release 1.5.5f and One-Page Checkout v2.0.4
