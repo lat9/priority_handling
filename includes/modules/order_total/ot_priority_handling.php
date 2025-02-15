@@ -61,7 +61,7 @@ class ot_priority_handling
             $this->fee = (float)MODULE_ORDER_TOTAL_PRIORITY_HANDLING_FEE;
             $this->tax_class = (int)MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TAX_CLASS;
 
-            $this->setStatusForEditOrders();
+            $this->initializeSelection();
         }
     }
 
@@ -69,10 +69,12 @@ class ot_priority_handling
     // This method provides integration with EO 5.0.0 and later. That version of EO maintains
     // a list of credit-class order-total modules that are currently used in the order.
     //
-    protected function setStatusForEditOrders(): void
+    protected function initializeSelection(): void
     {
-        if (IS_ADMIN_FLAG === true) {
-            $_SESSION['priority_handling'] = !empty($_POST['opt_priority_handling']) || $this->eoInfo['installed'] === true;
+        if (isset($_POST['opt_priority_handling'])) {
+            $_SESSION['priority_handling'] = !empty($_POST['opt_priority_handling']);
+        } else {
+            $_SESSION['priority_handling'] ??= $this->eoInfo['installed'];
         }
     }
 
@@ -84,7 +86,7 @@ class ot_priority_handling
             return;
         }
 
-        $this->setStatusForEditOrders();
+        $this->initializeSelection();
         if (empty($_SESSION['priority_handling'])) {
             return;
         }
@@ -130,7 +132,7 @@ class ot_priority_handling
         $this->output[] = [
             'title' => $this->title . ':',
             'text' => $ph_text,
-            'value' => $ph_value
+            'value' => $ph_value,
         ];
     }
 
@@ -145,7 +147,7 @@ class ot_priority_handling
             return [];
         }
 
-        $this->setStatusForEditOrders();
+        $this->initializeSelection();
 
         $handling_array = [
             [
@@ -189,9 +191,7 @@ class ot_priority_handling
     public function collect_posts()
     {
         if ($this->enabled === true) {
-            if (IS_ADMIN_FLAG === true && ($_POST['ot_class'] ?? '') === $this->code) {
-                $this->setStatusForEditOrders();
-            }
+            $this->initializeSelection();
         }
     }
 
