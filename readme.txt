@@ -30,9 +30,9 @@ make the tier range very large.
 
 Install
 -------
-1.) Copy the files into the same directory structure provided in the archive.
+1. Copy the files into the same directory structure provided in the archive.
 
-2.) Activate in admin (Modules->Order Totals) and edit the following settings.
+2. Activate in admin (Modules->Order Totals) and edit the following settings.
 
     a. Enable Priority Handling Module?  True
 
@@ -73,20 +73,20 @@ Install
 
 Upgrade from 1.0
 ----------------
-1.) Login as Admin, go to Modules->Order Total Modules, and record your current settings.
+1. Login as Admin, go to Modules->Order Total Modules, and record your current settings.
 
-2.) Uninstall the module.
+2. Uninstall the module.
 
-3.) Copy the files into the same directory structure provided in the archive.
+3. Copy the files into the same directory structure provided in the archive.
 
-3.) Re-install the module from Modules->Order Total Modules
+4. Re-install the module from Modules->Order Total Modules
 
-4.) Re-apply the previously recorded settings.
+5. Re-apply the previously recorded settings.
 
 
 HISTORY:
 --------
-Release 2.0.0, 20250127 lat9, carolinalaser
+Release 2.0.0, 20250310 lat9, carolinalaser
 Release 1.3.0, 20181012 lat9
 Release 1.2.1, 130529 mlankeit
 Release 1.2, 071312 mlankeit
