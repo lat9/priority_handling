@@ -60,8 +60,6 @@ class ot_priority_handling
 
             $this->fee = (float)MODULE_ORDER_TOTAL_PRIORITY_HANDLING_FEE;
             $this->tax_class = (int)MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TAX_CLASS;
-
-            $this->initializeSelection();
         }
     }
 
@@ -73,8 +71,8 @@ class ot_priority_handling
     {
         if (isset($_POST['opt_priority_handling'])) {
             $_SESSION['priority_handling'] = !empty($_POST['opt_priority_handling']);
-        } else {
-            $_SESSION['priority_handling'] ??= $this->eoInfo['installed'];
+        } elseif (IS_ADMIN_FLAG === true) {
+            $_SESSION['priority_handling'] = $this->eoInfo['installed'];
         }
     }
 

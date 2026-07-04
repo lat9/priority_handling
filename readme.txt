@@ -1,4 +1,4 @@
-Order_total module: Priority Handling v2.0.0
+Order_total module: Priority Handling v2.1.0
 License: GPL v2.0 
 Author: Markus Lankeit (markus@lankeit.org), lat9
 
@@ -60,7 +60,7 @@ Install
         The detfault tier values setup a 50 cent charge for every $100 tier up to a $1000 maximum,
         so the maximum priority charge that will be assessed is $5 (10 possible tiers with the default setting).
         If the price tier was $10, then the maximum priority charge would jump to $50 (100 possible tiers).
-        
+
     h. Tax Class...
         Apply which class, if any, to this type of handling fee.
         Note: services charges may fall under separate categories as goods in some areas.
@@ -86,6 +86,7 @@ Upgrade from 1.0
 
 HISTORY:
 --------
+Release 2.1.0, 20260704 lat9
 Release 2.0.0, 20250310 lat9, carolinalaser
 Release 1.3.0, 20181012 lat9
 Release 1.2.1, 130529 mlankeit
@@ -95,6 +96,10 @@ Release 1.0, 061102 mlankeit
 
 Change Log:
 -----------
+Release 2.1.0:
+o Tested against Zen Cart release 2.1.0 and later, EO v5.0.3.
+o Correct session-data "keeping" during EO operation.
+
 Release 2.0.0:
 o Tested against Zen Cart release 2.1.0.
 o Changes to enable the module to be used under PHP versions 8.0 and later.
