@@ -86,7 +86,7 @@ Upgrade from 1.0
 
 HISTORY:
 --------
-Release 2.1.0, 20260704 lat9
+Release 2.1.0, 20260706 lat9
 Release 2.0.0, 20250310 lat9, carolinalaser
 Release 1.3.0, 20181012 lat9
 Release 1.2.1, 130529 mlankeit
@@ -99,6 +99,7 @@ Change Log:
 Release 2.1.0:
 o Tested against Zen Cart release 2.1.0 and later, EO v5.0.3.
 o Correct session-data "keeping" during EO operation.
+o Prepare for zc300's zen_config function.
 
 Release 2.0.0:
 o Tested against Zen Cart release 2.1.0.
