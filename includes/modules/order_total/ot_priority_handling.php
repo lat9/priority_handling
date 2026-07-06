@@ -1,13 +1,13 @@
 <?php
 /*
   Priority Handling Module
-  ot_priority_handling.php, v2.0.0
+  ot_priority_handling.php, v2.1.0
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
   Copyright (c) 2002 osCommerce
 
-  Modified to work with zen cart 2.1.0 and Edit Orders 5.0.0
+  Modified to work with zen cart 2.1.0 and Edit Orders 5.0.3
 
   Released under the GNU General Public License
 */
@@ -34,14 +34,16 @@ class ot_priority_handling
         $this->code = 'ot_priority_handling';
         $this->title = MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TITLE;
         $this->description = MODULE_ORDER_TOTAL_PRIORITY_HANDLING_DESCRIPTION;
-        $this->sort_order = defined('MODULE_ORDER_TOTAL_PRIORITY_HANDLING_SORT_ORDER') ? (int)MODULE_ORDER_TOTAL_PRIORITY_HANDLING_SORT_ORDER : null;
-        if ($this->sort_order === null) {
+        $sort_order = $this->zenConfig('MODULE_ORDER_TOTAL_PRIORITY_HANDLING_SORT_ORDER');
+        if ($sort_order === null) {
+            $this->sort_order = null;
             return;
         }
 
+        $this->sort_order = (int)$sort_order;
         $this->output = [];
         $this->credit_class = true;
-        $this->enabled = (MODULE_ORDER_TOTAL_PRIORITY_HANDLING_STATUS === 'true');
+        $this->enabled = $this->zenConfig('MODULE_ORDER_TOTAL_PRIORITY_HANDLING_STATUS') === 'true';
 
         $this->eoInfo = [
             'installed' => false,
@@ -49,17 +51,17 @@ class ot_priority_handling
         ];
 
         if ($this->enabled === true) {
-            $this->handling_per = (float)MODULE_ORDER_TOTAL_PRIORITY_HANDLING_PER;
-            $this->handling_over = (float)MODULE_ORDER_TOTAL_PRIORITY_HANDLING_OVER;
+            $this->handling_per = (float)$this->zenConfig('MODULE_ORDER_TOTAL_PRIORITY_HANDLING_PER');
+            $this->handling_over = (float)$this->zenConfig('MODULE_ORDER_TOTAL_PRIORITY_HANDLING_OVER');
 
-            $this->increment = (float)MODULE_ORDER_TOTAL_PRIORITY_HANDLING_INCREMENT;
+            $this->increment = (float)$this->zenConfig('MODULE_ORDER_TOTAL_PRIORITY_HANDLING_INCREMENT');
             if ($this->increment <= 0) {
-                trigger_error('Handling Charge: Price Tier must be greater than 0 (' . MODULE_ORDER_TOTAL_PRIORITY_HANDLING_INCREMENT . '); using a default of 100.', E_USER_WARNING);
+                trigger_error('Handling Charge: Price Tier must be greater than 0 (' . $this->zenConfig('MODULE_ORDER_TOTAL_PRIORITY_HANDLING_INCREMENT') . '); using a default of 100.', E_USER_WARNING);
                 $this->increment = 100;
             }
 
-            $this->fee = (float)MODULE_ORDER_TOTAL_PRIORITY_HANDLING_FEE;
-            $this->tax_class = (int)MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TAX_CLASS;
+            $this->fee = (float)$this->zenConfig('MODULE_ORDER_TOTAL_PRIORITY_HANDLING_FEE');
+            $this->tax_class = (int)$this->zenConfig('MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TAX_CLASS');
         }
     }
 
@@ -94,12 +96,12 @@ class ot_priority_handling
             $cntry_id = $_SESSION['customer_country_id'];
             $zn_id = $_SESSION['customer_zone_id'];
         } else {
-            $cntry_id = STORE_COUNTRY;
-            $zn_id = STORE_ZONE;
+            $cntry_id = $this->zenConfig('STORE_COUNTRY');
+            $zn_id = $this->zenConfig('STORE_ZONE');
         }
 
         $tax = zen_get_tax_rate($this->tax_class);
-        if (MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TYPE === 'percent') {
+        if ($this->zenConfig('MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TYPE') === 'percent') {
             $ph_tax = zen_calculate_tax(($order->info['subtotal'] * $this->handling_per / 100), $tax);
             $ph_subtotal = $order->info['subtotal'] * $this->handling_per / 100;
         } else {
@@ -113,7 +115,7 @@ class ot_priority_handling
             $ph_subtotal = ($this->fee * $how_often);
         }
 
-        if (MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TAX_INLINE === 'Handling Fee') { 
+        if ($this->zenConfig('MODULE_ORDER_TOTAL_PRIORITY_HANDLING_TAX_INLINE') === 'Handling Fee') { 
             $ph_text = $currencies->format($ph_subtotal + $ph_tax, true, $order->info['currency'], $order->info['currency_value']);
             $ph_value = $ph_subtotal + $ph_tax; // nr@sebo addition
         } else {
@@ -260,5 +262,28 @@ class ot_priority_handling
             "DELETE FROM " . TABLE_CONFIGURATION . "
               WHERE configuration_key IN ('" . implode("', '", $this->keys()) . "')"
         );
+    }
+
+    // -----
+    // Uses, if present, or emulates otherwise the zc300+ "zen_config"
+    // function.
+    //
+    // @since v2.1.0
+    //
+    private function zenConfig(string $key, mixed $default = null): mixed
+    {
+        static $zen_config_present;
+        if (!isset($zen_config_present)) {
+            $zen_config_present = function_exists('zen_config');
+        }
+
+        if ($zen_config_present) {
+            return zen_config($key, $default);
+        }
+
+        if (defined($key)) {
+            return constant($key);
+        }
+        return $default_value;
     }
 }
